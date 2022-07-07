@@ -16,6 +16,9 @@ limitations under the License.
 
 --]]
 
+require('terra')
+_G.Strict.strict = false
+
 -- Create a luvit powered main that does the luvit CLI interface
 return require('./init')(function (...)
 
