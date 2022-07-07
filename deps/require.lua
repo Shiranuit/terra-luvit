@@ -288,7 +288,7 @@ function Module:require(name)
   moduleCache[key] = module
 
   local ext = path:match("%.[^/\\%.]+$")
-  if ext == ".lua" or ext == ".t" then
+  if ext == ".lua" then
     local match = path:match("^bundle:(.*)$")
     if match then
       local potential = pathJoin(bundle.base, "./" .. match)
@@ -298,14 +298,7 @@ function Module:require(name)
     else
       path = "@" .. path
     end
-
-    local func, err
-    if ext == ".t" then
-      func, err =  _G.terra.loadstring(data)
-    else
-      func, err = _G.loadstring(data, path)
-    end
-    local fn = assert(func, err)
+    local fn = assert(loadstring(data, path))
     local global = {
       module = module,
       exports = module.exports,
