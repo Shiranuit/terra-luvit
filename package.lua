@@ -9,7 +9,7 @@ return {
   homepage = "https://github.com/shiranuit/terra-luvit",
   description = "node.js style APIs for luvi as either a luvi app or library.",
   tags = { "terra", "luvit", "meta" },
-  author = { name = "shiranuit" },
+  author = { name = "Shiranuit" },
   contributors = {
     "Tim Caswell",
     "Ryan Phillips",

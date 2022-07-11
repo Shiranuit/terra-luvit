@@ -24,6 +24,16 @@ lit:
 terra-luvit: lit $(APP_FILES)
 	./lit make
 
+terra:
+	curl -L https://github.com/Shiranuit/terra/archive/refs/heads/master.zip -o terra.zip
+	unzip terra.zip && mv terra-master terra
+	rm terra.zip
+
+terra.so: terra
+	cd terra/build && cmake -DCMAKE_INSTALL_PREFIX=$PWD/../install ..
+	cd terra/build && make -j4
+	cp terra/build/lib/libterra.so terra.so
+
 install: terra-luvit lit
 	mkdir -p $(PREFIX)/bin
 	install terra-luvit $(PREFIX)/bin/
