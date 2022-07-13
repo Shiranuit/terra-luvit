@@ -136,7 +136,7 @@ local function isDir(path)
 end
 
 
-local types = { ".lua", binExt }
+local types = { ".lua", ".t", binExt }
 
 local function fixedRequire(path)
   assert(path)
@@ -288,7 +288,7 @@ function Module:require(name)
   moduleCache[key] = module
 
   local ext = path:match("%.[^/\\%.]+$")
-  if ext == ".lua" then
+  if ext == ".lua" or ext == ".t" then
     local match = path:match("^bundle:(.*)$")
     if match then
       local potential = pathJoin(bundle.base, "./" .. match)
@@ -298,6 +298,7 @@ function Module:require(name)
     else
       path = "@" .. path
     end
+    local loadstring = ext == ".t" and terralib.loadstring or loadstring
     local fn = assert(loadstring(data, path))
     local global = {
       module = module,

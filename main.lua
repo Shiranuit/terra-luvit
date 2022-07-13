@@ -16,7 +16,7 @@ limitations under the License.
 
 --]]
 
-require('terra')
+require('./terra')
 _G.Strict.strict = false
 
 -- Create a luvit powered main that does the luvit CLI interface
