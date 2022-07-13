@@ -21,7 +21,7 @@ clean:
 lit:
 	curl -L https://github.com/luvit/lit/raw/$(LIT_VERSION)/get-lit.sh | sh
 
-terra-luvit: lit $(APP_FILES)
+terra-luvit: terra.so lit $(APP_FILES)
 	./lit make
 
 terra:
