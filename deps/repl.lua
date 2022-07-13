@@ -44,6 +44,9 @@ local _builtinLibs = { 'buffer', 'childprocess', 'codec', 'core',
 
 return function (stdin, stdout, greeting)
 
+  local replLang = "lua"
+  local luaLoadstring = loadstring
+
   local req, mod = require('require')(pathJoin(uv.cwd(), "repl"))
   local oldGlobal = _G
   local global = setmetatable({
@@ -81,9 +84,20 @@ return function (stdin, stdout, greeting)
   local function evaluateLine(line)
     if line == "<3" or line == "♥" or line == "❤" then
       stdout:write("I " .. c("err") .. "♥" .. c() .. " you too!\n")
-      return '> '
+      return replLang .. '> '
     end
+
     local chunk  = buffer .. line
+
+    if line == "lua" and replLang ~= "lua" then
+      replLang = "lua"
+      return replLang .. '> '
+    elseif chunk == "terra" and replLang ~= "terra" then
+      replLang = "terra"
+      return replLang .. '> '
+    end
+
+    local loadstring = replLang == "lua" and luaLoadstring or terralib.loadstring
     local f, err = loadstring('return ' .. chunk, 'REPL') -- first we prefix return
 
     if not f then
@@ -122,7 +136,7 @@ return function (stdin, stdout, greeting)
       end
     end
 
-    return '> '
+    return replLang .. '> '
   end
 
   local function completionCallback(line)
@@ -170,7 +184,7 @@ return function (stdin, stdout, greeting)
   end
 
   local function start(historyLines, onSaveHistoryLines)
-    local prompt = "> "
+    local prompt = replLang .. "> "
     local history = History.new()
     if historyLines then
       history:load(historyLines)
